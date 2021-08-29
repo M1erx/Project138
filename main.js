@@ -25,6 +25,62 @@ function setup(){
   var canvas =  createCanvas(700,600);
 }
 
+img = "";
+noseX = 0;
+noseY = 0;
+pingPongX = 325;
+pingPongY = 325;
+
+function preload()
+{
+  img = loadImage("mario05.png");
+}
+
+function setup() {
+  createCanvas(650, 400);
+  video = createCapture(VIDEO);
+  video.size(600, 300);
+  
+  poseNet = ml5.poseNet(video, modelLoaded);
+  poseNet.on('pose', gotPoses);
+}
+
+function modelLoaded()
+{
+  console.log("modelLoaded");
+}
+
+function gotPoses(results)
+{
+  if(results.length > 0)
+    {
+      noseX = results[0].pose.nose.x;
+      noseY = results[0].pose.nose.y;
+      console.log("nosex = " + noseX + "nosey = " + noseY);
+    }
+}
+
+function draw() {
+  background("#D3D3D3");
+  if(noseX < 300) 
+  {
+    pingPongX = pingPongX - 1;
+  }
+  
+  if(noseX > 300)
+    {
+      pingPongX = pingPongX + 1;
+    }
+  
+  if(noseY < 150)
+    {
+      pingPongY = pingPongY - 1;
+    }
+  image(img,pingPongX, pingPongY, 40,70);
+}
+
+
+
 
 function draw(){
 
